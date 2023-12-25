@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Ashen Wings Minecraft Team</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #fff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #2e3b4e;
+            color: #fff;
+        }
+
+        header .logo img {
+            width: 100px; /* Adjust the size as needed */
+            height: auto;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav li {
+            margin-left: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px;
+            background-color: #1e2836;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #4d78cc;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        #login-form {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #4d78cc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #2e3b4e;
+        }
+
+        #login-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        #login-btn {
+            background-color: #4d78cc;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #profile {
+            display: none;
+            max-width: 200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        #profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+        #logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .team-list ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .team-list li {
+            margin: 10px;
+            text-align: center;
+            background-color: #2e3b4e;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .team-member img {
+            width: 50px; /* Adjust the size as needed */
+            height: 50px;
+            border-radius: 50%;
+            transform: rotateY(180deg);
+        }
+
+        .team-member p {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        footer {
+            background-color: #2e3b4e;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="shop.html">Shop</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Welcome to the website of Ashen Wings Minecraft Team</h1>
+        <p>Explore our Minecraft adventures and join us on our journey!</p>
+    </section>
+
+    <div id="login-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter your Minecraft username">
+        <button id="login-btn" onclick="login()">Login</button>
+    </div>
+
+    <div id="profile">
+        <h2 id="profile-username"></h2>
+        <img id="profile-img" alt="Profile Image">
+        <button id="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <section class="team-list">
+        <h2>Team Members</h2>
+
+        <ul>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/Sky1x_" alt="Sky1x_ Head">
+                <p>Sky1x_ - Leader</p>
+            </li>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/Icycom" alt="Icycom Head">
+                <p>Icycom - Leader</p>
+            </li>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/PainCyborg3" alt="PainCyborg3 Head">
+                <p>PainCyborg3 - Co-Leader</p>
+            </li>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/NotAreoBg" alt="NotAreoBg Head">
+                <p>NotAreoBg - Co-Leader</p>
+            </li>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/blabumbla" alt="blabumbla Head">
+                <p>blabumbla - Member</p>
+            </li>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/strwuberi" alt="strwuberi Head">
+                <p>strwuberi - Member</p>
+            </li>
+            <li class="team-member">
+                <img src="https://mc-heads.net/head/xKimaya" alt="xKimaya Head">
+                <p>xKimaya - Member</p>
+            </li>
+        </ul>
+    </section>
+
+    <script>
+        // Check if the user is already logged in
+        var savedUsername = getCookie("username");
+        if (savedUsername) {
+            showProfile(savedUsername);
+        }
+
+        function login() {
+            var username = document.getElementById('username').value;
+
+            if (username) {
+                // Save username in a cookie
+                setCookie("username", username, 365);
+
+                // Display profile section
+                showProfile(username);
+
+                // Hide login form
+                document.getElementById('login-form').style.display = 'none';
+            } else {
+                alert('Please enter a username.');
+            }
+        }
+
+        function logout() {
+            // Delete the username cookie
+            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+            // Show the login form and hide the profile
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('profile').style.display = 'none';
+        }
+
+        function showProfile(username) {
+            // Display profile section
+            document.getElementById('profile-username').textContent = username;
+            document.getElementById('profile-img').src = 'https://mc-heads.net/head/' + username + '/front';
+            document.getElementById('profile').style.display = 'block';
+        }
+
+        // Cookie functions
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+    </script>
+
+</body>
+</html>

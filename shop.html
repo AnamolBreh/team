@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Ashen Wings Minecraft Team - Shop</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #fff;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #2e3b4e;
+            color: #fff;
+        }
+
+        header .logo img {
+            width: 100px; /* Adjust the size as needed */
+            height: auto;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav li {
+            margin-left: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .shop-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .sell-column {
+            width: 40%;
+        }
+
+        .sell-form {
+            background-color: #2e3b4e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sell-form label,
+        .sell-form input,
+        .sell-form textarea,
+        .sell-form button {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .shop-items {
+            width: 55%;
+        }
+
+        .shop-item {
+            margin-bottom: 20px;
+            background-color: #2e3b4e;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .shop-item img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .shop-item h3,
+        .shop-item p {
+            margin: 0;
+            color: #fff;
+        }
+
+        .shop-item button {
+            background-color: #4d78cc;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #2e3b4e;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .modal-content {
+            background-color: #2e3b4e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #fff;
+        }
+
+        .close-btn {
+            color: #fff;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="shop-container">
+        <div class="sell-column">
+            <h2>Add Item for Sale</h2>
+            <h5>Note: Any items with invaild or inappropriate name, details will be removed! </h5>
+            <div class="sell-form">
+                <!-- Form for sellers to add items -->
+                <label for="sellerName">Your Name:</label>
+                <input type="text" id="sellerName">
+                <label for="itemName">Item Name:</label>
+                <input type="text" id="itemName">
+                <label for="itemDetails">Item Details:</label>
+                <textarea id="itemDetails"></textarea>
+                <button onclick="addItem()">Add Item</button>
+            </div>
+        </div>
+
+        <div class="shop-items" id="shopItems">
+            <!-- Display items for sale -->
+        </div>
+    </div>
+
+    <div id="buyForm" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeBuyForm()">&times;</span>
+            <h2 id="itemTitle"></h2>
+            <label for="minecraftUsername">Minecraft Username:</label>
+            <input type="text" id="minecraftUsername">
+            <label for="offerAmount">Offer Amount:</label>
+            <input type="text" id="offerAmount">
+            <button onclick="submitBuyForm()">Send</button>
+        </div>
+    </div>
+    
+    <script>
+        var shopItems = JSON.parse(localStorage.getItem('shopItems')) || [];
+    var adminPassword = "anamol@34er"; // Change this to your desired admin password
+
+    // Display items on page load
+    displayItems();
+
+    function displayItems() {
+        var shopItemsContainer = document.getElementById('shopItems');
+        shopItemsContainer.innerHTML = "";
+
+        // Display items for sale
+        shopItems.forEach(function (item, index) {
+            var itemElement = document.createElement('div');
+            itemElement.classList.add('shop-item');
+            itemElement.innerHTML = `
+                <img src="item-image.jpg" alt="${item.name}">
+                <h3>${item.name}</h3>
+                <p class="item-details">${item.details}</p>
+                <p>Seller: ${item.seller}</p>
+                <p>Date Added: ${item.dateAdded}</p>
+                <button onclick="showBuyForm('${item.seller}', '${item.name}')">Buy Item</button>
+                <button onclick="removeItem('${item.name}')">Remove</button>
+            `;
+            shopItemsContainer.appendChild(itemElement);
+        });
+    }
+
+    function addItem() {
+        var sellerName = document.getElementById('sellerName').value;
+        var itemName = document.getElementById('itemName').value;
+        var itemDetails = document.getElementById('itemDetails').value;
+
+        if (sellerName && itemName && itemDetails) {
+            // Add a new item to the shopItems array
+            var newItem = {
+                name: itemName,
+                details: itemDetails,
+                seller: sellerName,
+                dateAdded: new Date().toLocaleDateString(),
+            };
+
+            // Add the new item to the shopItems array
+            shopItems.push(newItem);
+
+            // Save items to localStorage
+            localStorage.setItem('shopItems', JSON.stringify(shopItems));
+
+            // Update the displayed items
+            displayItems();
+
+            // Clear the input fields
+            document.getElementById('sellerName').value = '';
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemDetails').value = '';
+        } else {
+            alert('Please fill in all fields.');
+        }
+    }
+    
+
+    function removeItem(itemName) {
+        // Prompt the user for the password
+        var enteredPassword = prompt("To remove this item, please enter the admin password:");
+
+        // Check if the entered password is correct
+        if (enteredPassword === adminPassword) {
+            // Find and remove the item from the shopItems array
+            shopItems = shopItems.filter(item => item.name !== itemName);
+
+            // Save updated items to localStorage
+            localStorage.setItem('shopItems', JSON.stringify(shopItems));
+
+            // Update the displayed items
+            displayItems();
+        } else {
+            alert("Incorrect password. Item removal is restricted.");
+        }
+    }
+    function showBuyForm(seller, itemName) {
+        var buyForm = document.getElementById('buyForm');
+        var itemTitle = document.getElementById('itemTitle');
+        itemTitle.textContent = itemName;
+
+        // Store the item details to use when submitting the form
+        buyForm.dataset.seller = seller;
+        buyForm.dataset.itemName = itemName;
+
+        buyForm.style.display = 'block';
+    }
+
+    function closeBuyForm() {
+        var buyForm = document.getElementById('buyForm');
+        buyForm.style.display = 'none';
+    }
+
+    function submitBuyForm() {
+        var buyForm = document.getElementById('buyForm');
+        var username = document.getElementById('minecraftUsername').value;
+        var offerAmount = document.getElementById('offerAmount').value;
+
+        var seller = buyForm.dataset.seller;
+        var itemName = buyForm.dataset.itemName;
+
+        // Create a Discord message content
+        var discordMessage = `User: ${username}\nItem: ${itemName}\nOffer: ${offerAmount}`;
+
+        // You need to replace 'YOUR_DISCORD_WEBHOOK_URL' with your actual Discord webhook URL
+        var webhookURL = 'https://discord.com/api/webhooks/1147184732824686703/v7H7gMCCQ14V1XWZlXsfPc6FMhdnFnVCtBO9JMO-rHYUV0rMlAexm_HEgHdzPcuoOgDL';
+
+        // Send a POST request to Discord webhook
+        fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: discordMessage }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response, if needed
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle errors, if any
+            console.error('Error sending message to Discord:', error);
+        });
+
+        // Close the form after submission
+        closeBuyForm();
+    }
+    </script>
+
+</body>
+</html>
